@@ -15,22 +15,7 @@ class LinkedListOneway(object):
         :param node:
         """
         self.__head = node
-
-    def __len__(self):
-        """
-        计算链表长度
-        :return:
-        """
-        # 游标，用来遍历列表
-        cur = self.__head
-
-        # 记录遍历次数
-        count = 0
-        while cur:
-            count += 1
-            cur = cur.next
-
-        return count
+        self.length = 0
 
     def is_empty(self):
         """
@@ -51,13 +36,17 @@ class LinkedListOneway(object):
         :return:
         """
         node = Node(value)
-        node.next = self.__head
-        self.__head = node
+        if self.is_empty():
+            self.__head = node
+        else:
+            node.next = self.__head
+            self.__head = node
+        self.length += 1
 
     def append(self, value):
         """
         尾插法
-        先遍历找到None值
+        先遍历找到结尾的None值
         :param value:
         :return:
         """
@@ -69,12 +58,19 @@ class LinkedListOneway(object):
             while cur.next:
                 cur = cur.next
             cur.next = node
+        self.length += 1
 
     def insert(self, pos, value):
+        """
+        随机插入
+        :param pos: 位序
+        :param value: 值
+        :return:
+        """
         # 应对特殊情况
         if pos <= 0:
             self.add(value)
-        elif pos > len(self) - 1:
+        elif pos > self.length - 1:
             self.append(value)
         else:
             node = Node(value)
@@ -87,10 +83,16 @@ class LinkedListOneway(object):
             # 先将插入节点与节点后的节点连接，防止链表断掉，先链接后面的，再链接前面的
             node.next = prior.next
             prior.next = node
+        self.length += 1
 
     def remove(self, value):
+        """
+        删除元素
+        :param value: 要删除的值
+        :return:
+        """
         cur = self.__head
-        prior = None
+        prior = None    # 该游标为cur的前一个节点x
         while cur:
             if value == cur.value:
                 # 判断此节点是否是头节点
@@ -103,8 +105,14 @@ class LinkedListOneway(object):
             else:
                 prior = cur
                 cur = cur.next
+        self.length -= 1
 
     def search(self, value):
+        """
+        查找节点是否存在
+        :param value:
+        :return:
+        """
         cur = self.__head
         while cur:
             if value == cur.value:
@@ -112,8 +120,15 @@ class LinkedListOneway(object):
             cur = cur.next
         return False
 
-    def traverse(self):
+    def travel(self):
+        """
+        遍历链表
+        :return:
+        """
         cur = self.__head
         while cur:
             print(cur.value)
             cur = cur.next
+        print(self.length)
+
+
